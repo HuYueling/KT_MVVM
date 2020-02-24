@@ -1,14 +1,17 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
 
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+
+    compileSdkVersion rootProject.ext.asConfig.compileSdkVersion
+    buildToolsVersion rootProject.ext.asConfig.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion rootProject.ext.asConfig.minSdkVersion
+        targetSdkVersion rootProject.ext.asConfig.targetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -23,14 +26,76 @@ android {
         }
     }
 
+    dataBinding {
+        enabled true
+    }
+
+    //编译配置
+    compileOptions {
+        // java版本
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
+    api fileTree(dir: 'libs', include: ['*.jar'] , exclude :"")
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api 'androidx.core:core-ktx:1.2.0'
+    //androidx.appcompat
+    api rootProject.ext.androidx.appcompat
+    api rootProject.ext.androidx.recyclerview
+    api rootProject.ext.androidx.design
+    api rootProject.ext.androidx["constraint-layout"]
+
+    api rootProject.ext.dependence.rxjava
+    api rootProject.ext.dependence.rxandroid
+//    api(rootProject.ext.dependence.rxlifecycle) {
+//        exclude group: 'androidx.appcompat'
+//        exclude group: 'com.android.support'
+//        exclude group: 'io.reactivex.rxjava2'
+//    }
+//    api(rootProject.ext.dependence["rxlifecycle-components"]) {
+//        exclude group: 'androidx.appcompat'
+//        exclude group: 'com.android.support'
+//        exclude group: 'io.reactivex.rxjava2'
+//    }
+    api rootProject.ext.dependence["lifecycle-extensions"]
+    annotationProcessor rootProject.ext.dependence["lifecycle-compiler"]
+    api rootProject.ext.dependence["live-event-bus"]
+    api(rootProject.ext.dependence.bindingcollectionadapter) {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'com.android.support'
+        exclude group: 'io.reactivex.rxjava2'
+    }
+    api(rootProject.ext.dependence["bindingcollectionadapter-recyclerview"]) {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'com.android.support'
+        exclude group: 'io.reactivex.rxjava2'
+    }
+    api rootProject.ext.dependence.okhttp
+    api rootProject.ext.dependence.retrofit
+    api(rootProject.ext.dependence.httpLog) {
+        exclude group: 'org.json', module: 'json'
+    }
+    api (rootProject.ext.dependence["converter-gson"]){
+        exclude group: 'io.reactivex.rxjava2'
+    }
+    api (rootProject.ext.dependence["adapter-rxjava"]){
+        exclude group: 'io.reactivex.rxjava2'
+    }
+    api(rootProject.ext.dependence.glide) {
+        exclude group: 'androidx.appcompat'
+        exclude group: 'com.android.support'
+    }
+    annotationProcessor rootProject.ext.dependence["glide-compiler"]
+
+    api rootProject.ext.dependence.diskLruCache
+
+
 }
